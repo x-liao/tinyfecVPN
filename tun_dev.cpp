@@ -123,25 +123,26 @@ int from_fec_to_normal2(conn_info_t & conn_info,dest_t &dest,char * data,int len
 	{
 
 #ifndef NOLIMIT
-		if(program_mode==server_mode)
-		{
-			char * tmp_data=out_arr[i];
-			int tmp_len=out_len[i];
-			iphdr *  iph;
-			iph = (struct iphdr *) tmp_data;
-			if(tmp_len>=int(sizeof(iphdr))&&iph->version==4)
-			{
-				u32_t dest_ip=iph->daddr;
-				//printf("%s\n",my_ntoa(dest_ip));
-				if(  ( ntohl(sub_net_uint32)&0xFFFFFF00 ) !=  ( ntohl (dest_ip) &0xFFFFFF00) )
-				{
-					string sub=my_ntoa(dest_ip);
-					string dst=my_ntoa( htonl( ntohl (sub_net_uint32) &0xFFFFFF00)   );
-					mylog(log_warn,"[restriction]packet's dest ip [%s] not in subnet [%s],dropped, maybe you need to compile an un-restricted server\n", sub.c_str(), dst.c_str());
-					continue;
-				}
-			}
-		}
+		// 限制代码
+		// if(program_mode==server_mode)
+		// {
+		// 	char * tmp_data=out_arr[i];
+		// 	int tmp_len=out_len[i];
+		// 	iphdr *  iph;
+		// 	iph = (struct iphdr *) tmp_data;
+		// 	if(tmp_len>=int(sizeof(iphdr))&&iph->version==4)
+		// 	{
+		// 		u32_t dest_ip=iph->daddr;
+		// 		//printf("%s\n",my_ntoa(dest_ip));
+		// 		if(  ( ntohl(sub_net_uint32)&0xFFFFFF00 ) !=  ( ntohl (dest_ip) &0xFFFFFF00) )
+		// 		{
+		// 			string sub=my_ntoa(dest_ip);
+		// 			string dst=my_ntoa( htonl( ntohl (sub_net_uint32) &0xFFFFFF00)   );
+		// 			mylog(log_warn,"[restriction]packet's dest ip [%s] not in subnet [%s],dropped, maybe you need to compile an un-restricted server\n", sub.c_str(), dst.c_str());
+		// 			continue;
+		// 		}
+		// 	}
+		// }
 #endif
 		delay_send(out_delay[i],dest,out_arr[i],out_len[i]);
 
